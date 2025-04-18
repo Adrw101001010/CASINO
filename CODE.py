@@ -13,21 +13,63 @@ and lose. The dealer then reveals their second card and must keep hitting until 
 at least 17. If the dealer busts, you win. If not, whoever has the higher total wins. A draw 
 returns your bet. You can't bet more than your balance, and winnings are added accordingly.
 
+For the slot, if you get three randomly selected symbols in a row, you earn a profit of one divided by the probability of the event.
 
-For both games, your winnins/losses and remaining balance are tracked. You can leave with profit, or leave when you're broke.
+For all games, your winnins/losses and remaining balance are tracked. You can leave with profit, or leave when you're broke.
+Good luck, and have fun!
 """
 
 
 
 
 import random
-import sys
+
 #BEGINNING OF RUN
 print("Welcome to the Casino!")
 nBalance = int(input("How much did you come to the table with? USD: ")) #user chooses their cash balance in the beginning
 nProfit = 0
 nTempProfit = 0
 #roulette function, where it spins until you hit your chosen number
+def play_slot(): #SLOT Function
+    global nBalance, nProfit
+    while True:
+        if nBalance <= 0:
+            print("You're broke, can't play")
+            return
+        intBetAmount = int(input("How much would you like to bet:  "))
+        if intBetAmount > nBalance:
+            print("Bet exceeds balance. Try a lower bet." )
+            continue
+        else:
+            nBalance -= intBetAmount
+        slot_result = ""
+        symbols = ["🍒", "🍋", "🍌", "🍉", "💎", "🔔", "🍀", "💧", "7️⃣"] #List of symbols for a 3slot- Slot machine
+        for i in range(3):
+            slot_result += random.choice(symbols) #Slot result is 3 random picks from symbols
+        print(slot_result)
+        if slot_result[0] == slot_result[1] == slot_result[2]:
+            win = intBetAmount * ((1/((1/9 ** 3)*9))) #The win is one divided by the probability of getting any of the symbols three times in a row
+            nBalance += win
+            nProfit += win
+            print(f"Hit! You won ${win}")
+            print(f"Your new balance is ${nBalance} and your profit is {nProfit}")
+        else:
+            print(f"No hit. Remaining balance is ${nBalance}")
+        while True:
+            play_again_or_no = input("Would you like to spin again? Type '1' to spin again, and '2' to quit slot")
+            if play_again_or_no == "1":
+                break
+            elif play_again_or_no == "2":
+                break
+            else:
+                print("invalid input, try again")
+        if play_again_or_no == "2":
+            break
+            
+            
+            
+            
+    
 def play_roulette():
     global nBalance, nProfit
     if nBalance <= 0:
@@ -174,13 +216,16 @@ while nBalance > 0:
     print("\n--- Game Menu ---")
     print("1: Play Blackjack")
     print("2: Play Roulette")
-    print("3: Leave Casino")
+    print("3: Play Slot")
+    print("4: Leave casino")
     choice = input("Choose a game (1/2) or 3 to exit: ")
     if choice == "1":
         play_blackjack()
     elif choice == "2":
         play_roulette()
     elif choice == "3":
+        play_slot()
+    elif choice == "4":
         break
     else:
         print("Invalid choice. Try again.")
